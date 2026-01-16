@@ -442,7 +442,54 @@ public class RedBlackTree{
   // To receive full credit you must explicitly check for each property! You may not assume anything based on the above implementation (which does ensure all these rules are followed)
   // you may wish to add some helper functions here.
   public boolean isRedBlack() {
-	  return false;
+    boolean isRB = true;
+
+    if (root.color == RED) {
+      isRB = false;
+    }
+
+    if (!blackToRedCheck(root)) {
+      isRB = false;
+    }
+
+    if (getBlackHeight(root) == -1) {
+      isRB = false;
+    }
+
+	  return isRB;
+  }
+
+  private boolean blackToRedCheck (Node node) {
+    if (node == null) {
+      return true;
+    }
+
+    if (node.color == RED) {
+      if ((node.left != null && node.left.color == RED) || (node.right != null && node.right.color == RED)) {
+        return false;
+      }
+    }
+
+    if (!blackToRedCheck(node.left) || !blackToRedCheck(node.right)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private int getBlackHeight(Node node) {
+    if (node == null) {
+      return 1; // leaf (null) is considered black with height 1
+    }
+
+    int leftHeight = getBlackHeight(node.left);
+    int rightHeight = getBlackHeight(node.right);
+
+    if (leftHeight == -1 || rightHeight == -1 || leftHeight != rightHeight) {
+      return -1; // inconsistent black heights
+    }
+
+    return leftHeight + (node.color == BLACK ? 1 : 0);
   }
   
   
